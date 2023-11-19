@@ -1,12 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-function User({ user, onRemove, onToggle }) {
-    useEffect(() => {
-        console.log("컴포넌트 화면 나타남");
-        return () => {
-            console.log("컴포넌트 화면 사라짐");
-        };
-    }, []);
+const User = React.memo(({ user, onRemove, onToggle }) => {
     return (
         <div>
             <b
@@ -15,14 +9,14 @@ function User({ user, onRemove, onToggle }) {
                     color: user.active ? 'green' : 'black'
                 }}
                 onClick={() => onToggle(user.id)}
-            >{ user.username}
+            >{user.username}
             </b> <span>({user.email})</span>
             <button onClick={() => onRemove(user.id)}>삭제</button>
         </div>
     );
-}
+});
 
-function UserList({users, onRemove, onToggle}) {
+const UserList = ({users, onRemove, onToggle}) => {
     return (
         <div>
             {
@@ -34,4 +28,7 @@ function UserList({users, onRemove, onToggle}) {
     );
 }
 
-export default UserList;
+export default React.memo(
+    UserList,
+    (prevProps, nextProps) => prevProps.users === nextProps.users
+);
